@@ -1,3 +1,6 @@
+'use strict';
+const gallery = document.querySelector(".gallery");
+
 const images = [
       {
         preview:
@@ -64,38 +67,38 @@ const images = [
       },
     ];
     
-    const gallery = document.querySelector('.gallery');
-    const markup = images
-    .map(
-        ({ preview, original, description }) => `<li class="gallery-item">
-        <a class="gallery-link" href="${original}">
-            <img
-            class="gallery-image"
-            src="${preview}"
-            data-source="${original}"
-            alt="${description}"
-            />
-        </a>
-    </li>
-    `
-    )
-    .join('');
+    
+    gallery.insertAdjacentHTML("beforeend", galleryMarkup(images));
+    
+    function galleryMarkup(img) {
+        return img.map((item) => `<li class="gallery-item">
+         <a class="gallery-link" href="${item.original}">
+         <img class="gallery-image"
+           src="${item.preview}"
+           data-source="${item.original}" 
+           alt="${item.description}" width="360" height="200"/>
+           </a>
+         </li>`).join("");
+    }
 
-    gallery.insertAdjacentHTML('beforeend', markup);
+    gallery.addEventListener("click", handleClick);
 
-    gallery.addEventListener('click', event => {
-        event.preventDefault();
-      
-        if (event.target.nodeName !== 'IMG') {
-          return;
+    function handleClick(event) {
+      event.preventDefault();
+        if(event.target.nodeName !== "IMG") {
+            return;
         }
+
+
+        const sourceSet = event.target.dataset.source;
+
+        const instans = basicLightbox.create(`
+          <div class="modal">
+          <img src="${sourceSet}"/>
+          </div>
+          `)
       
-        const selectedImg = event.target.dataset.source;
-        console.log(selectedImg);
-      
-        const modal = basicLightbox.create(
-          `<img src="${selectedImg}" width: 1112px height: 640px>`
-        );
-      
-        modal.show();
-      });
+          instans.show()
+
+  
+    }
